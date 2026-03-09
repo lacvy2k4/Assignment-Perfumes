@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || '');</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Collectors</title>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+    <div class="max-w-4xl mx-auto px-6 pt-8">
+        <a href="/"
+            class="inline-flex items-center gap-2 text-base-content/60 hover:text-base-content transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span class="font-medium">Back</span>
+        </a>
+    </div>
+
+    <main class="max-w-4xl mx-auto px-6 py-8">
+
+        <% if (error) { %>
+            <div class="flex flex-col items-center justify-center py-20">
+                <h1 class="text-3xl font-bold text-error mb-2">Unauthorized</h1>
+                <p class="text-base-content/60 mb-6">
+                    <%= error %>
+                </p>
+                <a href="/" class="btn btn-neutral">Quay về trang chủ</a>
+            </div>
+            <% } else { %>
+
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-base-content">Collectors</h1>
+                        <p class="text-base-content/50 mt-1">Total: <%= members.length %> members</p>
+                    </div>
+                </div>
+
+                <div
+                    class="rounded-2xl bg-base-100/40 backdrop-blur-lg border border-white/40 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_32px_0_rgba(0,0,0,0.08)] overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="table w-full">
+                            <thead>
+                                <tr class="border-b border-base-content/10">
+                                    <th
+                                        class="text-xs text-base-content/40 uppercase tracking-wider font-semibold py-4 px-6">
+                                        #
+                                    </th>
+                                    <th
+                                        class="text-xs text-base-content/40 uppercase tracking-wider font-semibold py-4 px-6">
+                                        Name</th>
+                                    <th
+                                        class="text-xs text-base-content/40 uppercase tracking-wider font-semibold py-4 px-6">
+                                        Email</th>
+                                    <th
+                                        class="text-xs text-base-content/40 uppercase tracking-wider font-semibold py-4 px-6">
+                                        YOB</th>
+                                    <th
+                                        class="text-xs text-base-content/40 uppercase tracking-wider font-semibold py-4 px-6">
+                                        Gender</th>
+                                    <th
+                                        class="text-xs text-base-content/40 uppercase tracking-wider font-semibold py-4 px-6">
+                                        Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% members.forEach((m, index)=> { %>
+                                    <tr
+                                        class="border-b border-base-content/5 hover:bg-base-content/[0.03] transition-colors duration-200">
+                                        <td class="py-4 px-6 text-base-content/60 font-medium">
+                                            <%= index + 1 %>
+                                        </td>
+                                        <td class="py-4 px-6 font-semibold text-base-content">
+                                            <%= m.name %>
+                                        </td>
+                                        <td class="py-4 px-6 text-base-content/70">
+                                            <%= m.email %>
+                                        </td>
+                                        <td class="py-4 px-6 text-base-content/70">
+                                            <%= m.YOB %>
+                                        </td>
+                                        <td class="py-4 px-6 text-base-content/70">
+                                            <%= m.gender ? 'Male' : 'Female' %>
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <% if (m.isAdmin) { %>
+                                                <span
+                                                    class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 text-xs font-semibold">
+                                                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    Admin
+                                                </span>
+                                                <% } else { %>
+                                                    <span
+                                                        class="inline-flex items-center px-3 py-1 rounded-full bg-base-content/5 text-base-content/50 text-xs font-semibold">
+                                                        Member
+                                                    </span>
+                                                    <% } %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <% } %>
+    </main>
+
+
+
+
+</body>
+
+</html>

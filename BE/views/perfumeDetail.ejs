@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || '');</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>
+        <%= perfume.perfumeName %> - Store Perfume
+    </title>
+    <style>
+        .glass-card {
+            background: color-mix(in srgb, var(--color-base-100) 40%, transparent);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid color-mix(in srgb, var(--color-base-content) 15%, transparent);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+    <!-- Back Button -->
+    <div class="max-w-6xl mx-auto px-6 pt-8">
+        <% if (member && member.isAdmin) { %>
+            <a href="/perfumes"
+                class="inline-flex items-center gap-2 text-base-content/60 hover:text-base-content transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span class="font-medium">Back</span>
+            </a>
+            <% } else { %>
+                <a href="/"
+                    class="inline-flex items-center gap-2 text-base-content/60 hover:text-base-content transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span class="font-medium">Back</span>
+                </a>
+                <% } %>
+    </div>
+
+    <!-- Product Detail in Glass Card -->
+    <main class="max-w-6xl mx-auto px-6 py-8">
+        <div class="glass-card rounded-3xl p-8 lg:p-12">
+            <div class="flex flex-col lg:flex-row gap-10">
+
+                <!-- Image -->
+                <div class="lg:w-1/2">
+                    <div class="rounded-2xl overflow-hidden shadow-lg">
+                        <img src="<%= perfume.uri %>" alt="<%= perfume.perfumeName %>"
+                            class="w-full h-[500px] object-cover"
+                            onerror="this.src='https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp'" />
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="lg:w-1/2 flex flex-col gap-6">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-xs text-base-content/40 uppercase tracking-[0.25em] font-medium">
+                                <%= perfume.brandName || '' %>
+                            </p>
+                            <% if (member && member.isAdmin) { %>
+                                <div class="flex gap-2">
+                                    <button onclick="document.getElementById('editModal').showModal()"
+                                        class="btn btn-sm btn-info">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Edit
+                                    </button>
+                                    <button onclick="document.getElementById('deleteModal').showModal()"
+                                        class="btn btn-sm btn-error">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        Delete
+                                    </button>
+                                </div>
+                                <% } %>
+                        </div>
+                        <h1 class="text-4xl lg:text-5xl font-serif font-light text-base-content tracking-wide">
+                            <%= perfume.perfumeName %>
+                        </h1>
+                    </div>
+
+                    <div class="text-2xl font-light text-base-content tracking-wider mt-1">$<%= perfume.price %>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 mt-2">
+                        <span
+                            class="px-5 py-2 border backdrop-blur-md rounded-full text-xs tracking-[0.15em] uppercase <%= getConcentrationClass(perfume.concentration) %>">
+                            <%= perfume.concentration %>
+                        </span>
+
+                        <span
+                            class="px-5 py-2 bg-base-100/50 border border-base-content/20 shadow-sm backdrop-blur-md rounded-full text-xs font-medium tracking-[0.15em] text-base-content/60 uppercase">
+                            <%= perfume.targetAudience %>
+                        </span>
+
+                        <span
+                            class="px-5 py-2 bg-base-100/50 border border-base-content/20 shadow-sm backdrop-blur-md rounded-full text-xs font-medium tracking-[0.15em] text-base-content/60 uppercase">
+                            <%= perfume.volume %>ml
+                        </span>
+                    </div>
+
+                    <div class="mt-4">
+                        <h3 class="text-xs font-light text-base-content/40 uppercase tracking-[0.25em] mb-3">Description
+                        </h3>
+                        <p class="text-base-content/70 leading-loose font-light">
+                            <%= perfume.description %>
+                        </p>
+                    </div>
+
+                    <div class="mt-2">
+                        <h3 class="text-xs font-light text-base-content/40 uppercase tracking-[0.25em] mb-3">Ingredients
+                        </h3>
+                        <p class="text-base-content/70 leading-loose font-light">
+                            <%= perfume.ingredients %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section in Glass Card -->
+        <div class="glass-card rounded-3xl p-8 lg:p-12 mt-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-serif font-light text-base-content tracking-wide">
+                    Reviews
+                    <span class="text-base-content/40 text-lg font-light ml-2">(<%= perfume.comments ?
+                            perfume.comments.length : 0 %>)</span>
+                </h2>
+                <% if (member && member.isAdmin) { %>
+                    <!-- Admin: no review button -->
+                    <% } else if (member && !hasCommented) { %>
+                        <button onclick="document.getElementById('commentModal').showModal()"
+                            class="px-6 py-2.5 bg-neutral text-neutral-content text-sm font-medium tracking-wider uppercase rounded-full hover:opacity-80 transition-colors duration-300">
+                            Write a Review
+                        </button>
+                        <% } else if (member && hasCommented) { %>
+                            <span class="px-6 py-2.5 text-sm font-medium tracking-wider uppercase text-base-content/40">
+                                ✓ Reviewed
+                            </span>
+                            <% } else { %>
+                                <a href="/login"
+                                    class="px-6 py-2.5 bg-ne                                                                                                                i                             utral text-neutral-content text-sm font-medium tracking-wider uppercase rounded-full hover:opacity-80 transition-colors duration-300">
+                                    Login to Review
+                                </a>
+                                <% } %>
+            </div>
+
+            <% if (perfume.comments && perfume.comments.length> 0) { %>
+                <div class="flex flex-col gap-4">
+                    <% perfume.comments.forEach(comment=> { %>
+                        <div class="bg-base-100/40 backdrop-blur-sm rounded-xl border border-base-content/10 p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-neutral text-neutral-content flex items-center justify-center font-bold text-sm">
+                                        <%= comment.author?.name ? comment.author.name.charAt(0).toUpperCase() : '?' %>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-base-content">
+                                            <%= comment.author?.name || 'Anonymous' %>
+                                        </p>
+                                        <p class="text-xs text-base-content/40">
+                                            <%= new Date(comment.createdAt).toLocaleDateString('en-US', {
+                                                year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <% for (let i=1; i <=3; i++) { %>
+                                        <svg class="w-5 h-5 <%= i <= comment.rating ? 'text-yellow-400' : 'text-base-content/20' %>"
+                                            fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                        <% } %>
+                                </div>
+                            </div>
+                            <p class="text-base-content/60 leading-relaxed">
+                                <%= comment.content %>
+                            </p>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } else { %>
+                    <div
+                        class="bg-base-100/30 backdrop-blur-sm rounded-xl border border-base-content/10 p-8 text-center">
+                        <p class="text-base-content/40">No reviews yet. Be the first to share your thoughts!</p>
+                    </div>
+                    <% } %>
+        </div>
+    </main>
+
+    <!-- Edit Modal -->
+    <dialog id="editModal" class="modal">
+        <div class="modal-box rounded-2xl max-w-lg">
+            <h3 class="text-xl font-semibold text-base-content mb-4">Edit Perfume</h3>
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Perfume Name</label>
+            <input id="editPerfumeName" type="text" placeholder="Perfume name" class="input input-bordered w-full mb-3"
+                value="<%= perfume.perfumeName %>" />
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Image URL</label>
+            <input id="editUri" type="text" placeholder="Image URL" class="input input-bordered w-full mb-3"
+                value="<%= perfume.uri %>" />
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Price</label>
+            <input id="editPrice" type="number" placeholder="Price" class="input input-bordered w-full mb-3"
+                value="<%= perfume.price %>" />
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Concentration</label>
+            <input id="editConcentration" type="text" placeholder="Concentration"
+                class="input input-bordered w-full mb-3" value="<%= perfume.concentration %>" />
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Description</label>
+            <textarea id="editDescription" placeholder="Description"
+                class="textarea textarea-bordered w-full mb-3"><%= perfume.description %></textarea>
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Ingredients</label>
+            <input id="editIngredients" type="text" placeholder="Ingredients" class="input input-bordered w-full mb-3"
+                value="<%= perfume.ingredients %>" />
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Volume (ml)</label>
+            <input id="editVolume" type="number" placeholder="Volume (ml)" class="input input-bordered w-full mb-3"
+                value="<%= perfume.volume %>" />
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Target Audience</label>
+            <input id="editTargetAudience" type="text" placeholder="Target Audience"
+                class="input input-bordered w-full mb-3" value="<%= perfume.targetAudience %>" />
+
+            <label class="text-sm font-medium text-base-content/70 mb-1 block">Brand</label>
+            <select id="editBrand" class="select select-bordered w-full mb-3">
+                <option value="">Select Brand</option>
+                <% brands.forEach(brand=> { %>
+                    <option value="<%= brand._id %>" <%=perfume.brand && perfume.brand.toString()===brand._id.toString()
+                        ? 'selected' : '' %>><%= brand.brandName %>
+                    </option>
+                    <% }) %>
+            </select>
+            <div id="editError" class="text-error text-sm hidden mb-2"></div>
+            <div class="modal-action">
+                <button onclick="document.getElementById('editModal').close()" class="btn btn-ghost">Cancel</button>
+                <button onclick="updatePerfume()" class="btn btn-info">Update</button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+    </dialog>
+
+    <!-- Delete Modal -->
+    <dialog id="deleteModal" class="modal">
+        <div class="modal-box rounded-2xl">
+            <h3 class="text-xl font-semibold text-base-content mb-2">Delete Perfume</h3>
+            <p class="text-base-content/70">Are you sure you want to delete <strong>
+                    <%= perfume.perfumeName %>
+                </strong>?
+                This action cannot be undone.</p>
+            <div id="deleteError" class="text-error text-sm hidden mt-2"></div>
+            <div class="modal-action">
+                <button onclick="document.getElementById('deleteModal').close()" class="btn btn-ghost">Cancel</button>
+                <button onclick="deletePerfume()" class="btn btn-error">Delete</button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+    </dialog>
+
+    <!-- Comment Modal -->
+    <% if (member && !member.isAdmin) { %>
+        <dialog id="commentModal" class="modal">
+            <div class="modal-box glass-card rounded-3xl max-w-md mx-auto p-8">
+                <h3 class="text-2xl font-serif font-light text-base-content tracking-wide mb-6">Write a Review</h3>
+
+                <!-- Rating -->
+                <div class="mb-6">
+                    <p class="text-xs text-base-content/40 uppercase tracking-[0.25em] mb-3 font-medium">Rating</p>
+                    <div class="flex gap-2" id="ratingStars">
+                        <% for (let i=1; i <=3; i++) { %>
+                            <svg class="w-8 h-8 text-base-content/20 cursor-pointer hover:text-yellow-400 transition-colors star"
+                                data-star="<%= i %>" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <% } %>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="mb-6">
+                    <p class="text-xs text-base-content/40 uppercase tracking-[0.25em] mb-3 font-medium">Your Review</p>
+                    <textarea id="commentContent" rows="4" placeholder="Share your experience..."
+                        class="w-full p-4 bg-base-100/50 backdrop-blur-sm border border-base-content/15 rounded-xl text-base-content placeholder-base-content/40 focus:outline-none focus:ring-2 focus:ring-base-content/20 resize-none"></textarea>
+                </div>
+
+                <!-- Error Message -->
+                <div id="commentError" class="hidden text-red-500 text-sm mb-4"></div>
+
+                <!-- Actions -->
+                <div class="flex gap-3 justify-end">
+                    <button onclick="document.getElementById('commentModal').close()"
+                        class="px-5 py-2.5 text-sm font-medium text-base-content/50 hover:text-base-content/70 transition-colors">Cancel</button>
+                    <button onclick="submitComment()"
+                        class="px-6 py-2.5 bg-neutral text-neutral-content text-sm font-medium tracking-wider uppercase rounded-full hover:opacity-80 transition-colors duration-300">Submit</button>
+                </div>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
+        <% } %>
+
+            <script>
+                async function updatePerfume() {
+                    const perfumeName = document.getElementById('editPerfumeName').value.trim();
+                    const uri = document.getElementById('editUri').value.trim();
+                    const price = document.getElementById('editPrice').value.trim();
+                    const concentration = document.getElementById('editConcentration').value.trim();
+                    const description = document.getElementById('editDescription').value.trim();
+                    const ingredients = document.getElementById('editIngredients').value.trim();
+                    const volume = document.getElementById('editVolume').value.trim();
+                    const targetAudience = document.getElementById('editTargetAudience').value.trim();
+                    const brand = document.getElementById('editBrand').value;
+                    const errorDiv = document.getElementById('editError');
+                    errorDiv.classList.add('hidden');
+
+                    if (!perfumeName || !uri || !price || !concentration || !description || !ingredients || !volume || !targetAudience || !brand) {
+                        errorDiv.textContent = 'All fields are required.';
+                        errorDiv.classList.remove('hidden');
+                        return;
+                    }
+                    try {
+                        const res = await fetch('/perfumes/<%= perfume._id %>', {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ perfumeName, uri, price: Number(price), concentration, description, ingredients, volume: Number(volume), targetAudience, brand })
+                        });
+                        const data = await res.json();
+                        if (data.status) {
+                            window.location.reload();
+                        } else {
+                            errorDiv.textContent = data.message || 'Failed to update perfume.';
+                            errorDiv.classList.remove('hidden');
+                        }
+                    } catch (err) {
+                        errorDiv.textContent = 'Network error.';
+                        errorDiv.classList.remove('hidden');
+                    }
+                }
+
+                async function deletePerfume() {
+                    const errorDiv = document.getElementById('deleteError');
+                    errorDiv.classList.add('hidden');
+                    try {
+                        const res = await fetch('/perfumes/<%= perfume._id %>', { method: 'DELETE' });
+                        const data = await res.json();
+                        if (data.status) {
+                            window.location.href = '/perfumes';
+                        } else {
+                            errorDiv.textContent = data.message || 'Failed to delete perfume.';
+                            errorDiv.classList.remove('hidden');
+                        }
+                    } catch (err) {
+                        errorDiv.textContent = 'Network error.';
+                        errorDiv.classList.remove('hidden');
+                    }
+                }
+
+                // ===== Comments =====
+                let selectedRating = 0;
+
+                // Bind click events to rating stars
+                document.querySelectorAll('#ratingStars .star').forEach(star => {
+                    star.addEventListener('click', () => {
+                        setRating(parseInt(star.getAttribute('data-star')));
+                    });
+                });
+
+                function setRating(rating) {
+                    selectedRating = rating;
+                    document.querySelectorAll('#ratingStars .star').forEach(star => {
+                        const val = parseInt(star.getAttribute('data-star'));
+                        star.classList.toggle('text-yellow-400', val <= rating);
+                        star.classList.toggle('text-base-content/20', val > rating);
+                    });
+                }
+
+                async function submitComment() {
+                    const content = document.getElementById('commentContent').value.trim();
+                    const errorDiv = document.getElementById('commentError');
+                    errorDiv.classList.add('hidden');
+
+                    if (!selectedRating || !content) {
+                        errorDiv.textContent = 'Please select a rating and write your review.';
+                        errorDiv.classList.remove('hidden');
+                        return;
+                    }
+
+                    try {
+                        const res = await fetch('/comments/perfumes/<%= perfume._id %>', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                rating: selectedRating,
+                                content: content,
+                                author: '<%= member ? member._id : "" %>'
+                            })
+                        });
+                        const data = await res.json();
+                        if (data.status) {
+                            window.location.reload();
+                        } else {
+                            errorDiv.textContent = data.message || 'Failed to submit review.';
+                            errorDiv.classList.remove('hidden');
+                        }
+                    } catch (err) {
+                        errorDiv.textContent = 'Network error. Please try again.';
+                        errorDiv.classList.remove('hidden');
+                    }
+                }
+            </script>
+
+</body>
+
+</html>

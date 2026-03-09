@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || '');</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Perfumes Management</title>
+</head>
+
+<body class="bg-base-200 min-h-screen">
+
+    <div class="max-w-4xl mx-auto px-6 pt-8">
+        <a href="/"
+            class="inline-flex items-center gap-2 text-base-content/60 hover:text-base-content transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span class="font-medium">Back</span>
+        </a>
+    </div>
+
+    <main class="max-w-4xl mx-auto px-6 py-8">
+
+        <% if (error) { %>
+            <div class="flex flex-col items-center justify-center py-20">
+                <h1 class="text-3xl font-bold text-error mb-2">Unauthorized</h1>
+                <p class="text-base-content/60 mb-6">
+                    <%= error %>
+                </p>
+                <a href="/" class="btn btn-neutral">Quay về trang chủ</a>
+            </div>
+            <% } else { %>
+
+                <div class="flex items-center justify-between mb-8">
+                    <h1 class="text-3xl font-serif font-light text-base-content tracking-wide">Perfumes Management</h1>
+                    <button onclick="document.getElementById('addModal').showModal()"
+                        class="px-6 py-2.5 bg-neutral text-neutral-content text-sm font-medium tracking-wider uppercase rounded-full hover:opacity-80 transition-colors duration-300">
+                        + Add Perfume
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto bg-base-100 rounded-2xl shadow-lg border border-base-content/10">
+                    <table class="table table-zebra w-full">
+                        <thead>
+                            <tr class="text-xs uppercase tracking-widest text-base-content/50">
+                                <th class="pl-6">#</th>
+                                <th>Perfume Name</th>
+                                <th>Price</th>
+                                <th>Brand</th>
+                                <th class="text-right pr-6">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (perfumes.length===0) { %>
+                                <tr>
+                                    <td colspan="5" class="text-center py-8 text-base-content/40">No perfumes found.
+                                    </td>
+                                </tr>
+                                <% } %>
+                                    <% perfumes.forEach((perfume, index)=> { %>
+                                        <tr class="hover">
+                                            <td class="pl-6 font-mono text-base-content/50">
+                                                <%= index + 1 %>
+                                            </td>
+                                            <td class="font-semibold text-base-content">
+                                                <%= perfume.perfumeName %>
+                                            </td>
+                                            <td class="text-base-content/60 text-sm">
+                                                $<%= perfume.price %>
+                                            </td>
+                                            <td class="text-base-content/60 text-sm">
+                                                <%= perfume.brand?.brandName || 'N/A' %>
+                                            </td>
+                                            <td class="text-right pr-6">
+                                                <a href="/perfumes/<%= perfume._id %>"
+                                                    class="btn btn-sm btn-ghost text-info hover:bg-info/10">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                    View Detail
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <% } %>
+    </main>
+
+    <!-- Add Perfume Modal -->
+    <dialog id="addModal" class="modal">
+        <div class="modal-box rounded-2xl max-w-lg">
+            <h3 class="text-xl font-semibold text-base-content mb-4">Add New Perfume</h3>
+
+            <input id="addPerfumeName" type="text" placeholder="Perfume name"
+                class="input input-bordered w-full mb-2" />
+            <input id="addUri" type="text" placeholder="Image URL" class="input input-bordered w-full mb-2" />
+            <input id="addPrice" type="number" placeholder="Price" class="input input-bordered w-full mb-2" />
+            <input id="addConcentration" type="text" placeholder="Concentration"
+                class="input input-bordered w-full mb-2" />
+            <textarea id="addDescription" placeholder="Description"
+                class="textarea textarea-bordered w-full mb-2"></textarea>
+            <input id="addIngredients" type="text" placeholder="Ingredients" class="input input-bordered w-full mb-2" />
+            <input id="addVolume" type="number" placeholder="Volume (ml)" class="input input-bordered w-full mb-2" />
+            <input id="addTargetAudience" type="text" placeholder="Target Audience"
+                class="input input-bordered w-full mb-2" />
+            <select id="addBrand" class="select select-bordered w-full mb-2">
+                <option value="">Select Brand</option>
+                <% brands.forEach(brand=> { %>
+                    <option value="<%= brand._id %>">
+                        <%= brand.brandName %>
+                    </option>
+                    <% }) %>
+            </select>
+
+            <div id="addError" class="text-error text-sm hidden mb-2"></div>
+            <div class="modal-action">
+                <button onclick="document.getElementById('addModal').close()" class="btn btn-ghost">Cancel</button>
+                <button onclick="addPerfume()" class="btn btn-neutral">Create</button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+    </dialog>
+
+    <script>
+        async function addPerfume() {
+            const perfumeName = document.getElementById('addPerfumeName').value.trim();
+            const uri = document.getElementById('addUri').value.trim();
+            const price = document.getElementById('addPrice').value.trim();
+            const concentration = document.getElementById('addConcentration').value.trim();
+            const description = document.getElementById('addDescription').value.trim();
+            const ingredients = document.getElementById('addIngredients').value.trim();
+            const volume = document.getElementById('addVolume').value.trim();
+            const targetAudience = document.getElementById('addTargetAudience').value.trim();
+            const brand = document.getElementById('addBrand').value;
+            const errorDiv = document.getElementById('addError');
+            errorDiv.classList.add('hidden');
+
+            if (!perfumeName || !uri || !price || !concentration || !description || !ingredients || !volume || !targetAudience || !brand) {
+                errorDiv.textContent = 'All fields are required.';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            try {
+                const res = await fetch('/perfumes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ perfumeName, uri, price: Number(price), concentration, description, ingredients, volume: Number(volume), targetAudience, brand })
+                });
+                const data = await res.json();
+                if (data.status) {
+                    window.location.reload();
+                } else {
+                    errorDiv.textContent = data.message || 'Failed to create perfume.';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Network error.';
+                errorDiv.classList.remove('hidden');
+            }
+        }
+    </script>
+
+</body>
+
+</html>

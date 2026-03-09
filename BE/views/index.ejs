@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+<script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || '');</script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Store Perfume</title>
+</head>
+
+<body
+    class="bg-base-100 min-h-screen antialiased text-base-content relative overflow-x-hidden transition-colors duration-300">
+
+    <nav
+        class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 bg-base-100/50 backdrop-blur-[0px] saturate-[180%] border border-white/40 dark:border-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_8px_32px_0_rgba(0,0,0,0.1)] rounded-full px-8 py-4 flex justify-between items-center transition-all duration-500">
+
+        <div class="relative text-2xl font-extrabold text-base-content z-10">
+            <a href="/">StorePerfume</a>
+        </div>
+        <ul class="flex items-center gap-8 font-semibold text-base-content/80">
+            <% if (member?.isAdmin) { %>
+                <li>
+                    <a href="/brands"
+                        class="relative group/brands hover:text-indigo-600 transition-colors duration-300">
+                        Brands
+                        <span
+                            class="absolute left-0 -bottom-1 w-0 h-0.5 bg-indigo-500 transition-all duration-300 group-hover/brands:w-full"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/perfumes"
+                        class="relative group/perfumes hover:text-indigo-600 transition-colors duration-300">
+                        Perfumes
+                        <span
+                            class="absolute left-0 -bottom-1 w-0 h-0.5 bg-indigo-500 transition-all duration-300 group-hover/perfumes:w-full"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/collectors"
+                        class="relative group/collectors hover:text-indigo-600 transition-colors duration-300">
+                        Collectors
+                        <span
+                            class="absolute left-0 -bottom-1 w-0 h-0.5 bg-indigo-500 transition-all duration-300 group-hover/collectors:w-full"></span>
+                    </a>
+                </li>
+                <% } %>
+                    <% if (member) { %>
+                        <span class="font-bold">
+                            Welcome,
+                        </span>
+                        <li class="dropdown dropdown-end">
+
+                            <div tabindex="0" role="button"
+                                class="flex items-center gap-2 hover:text-indigo-600 transition-colors duration-300 cursor-pointer">
+
+                                <span class="font-bold">
+                                    <%= member.name %>
+                                </span>
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7">
+                                    </path>
+                                </svg>
+                            </div>
+                            <ul tabindex="0"
+                                class="dropdown-content menu bg-base-100/90 backdrop-blur-xl rounded-box z-[1] w-52 p-2 shadow border border-base-content/10 mt-4 gap-1 font-medium">
+                                <li><a href="/profile"
+                                        class="hover:bg-indigo-500/10 hover:text-indigo-600 rounded-lg">Profile</a></li>
+                                <li><a href="/logout"
+                                        class="text-error hover:bg-error/10 hover:text-error rounded-lg">Logout</a></li>
+                            </ul>
+                        </li>
+                        <% } else { %>
+                            <li>
+                                <a href="/login"
+                                    class="relative group/login hover:text-indigo-600 transition-colors duration-300">
+                                    Login
+                                    <span
+                                        class="absolute left-0 -bottom-1 w-0 h-0.5 bg-indigo-500 transition-all duration-300 group-hover/login:w-full"></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/register"
+                                    class="px-6 py-2.5 rounded-full bg-base-content text-base-100 shadow-md hover:shadow-xl hover:opacity-90 transition-all duration-300 transform hover:-translate-y-0.5">
+                                    Register
+                                </a>
+                            </li>
+                            <% } %>
+                                <li class="flex items-center justify-center">
+                                    <label
+                                        class="swap swap-rotate text-base-content/70 hover:text-indigo-600 transition-colors duration-300">
+                                        <!-- this hidden checkbox controls the state -->
+                                        <input type="checkbox" class="theme-controller" value="synthwave" />
+
+                                        <!-- sun icon -->
+                                        <svg class="swap-off h-7 w-7 fill-current" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24">
+                                            <path
+                                                d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+                                        </svg>
+
+                                        <!-- moon icon -->
+                                        <svg class="swap-on h-7 w-7 fill-current" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24">
+                                            <path
+                                                d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+                                        </svg>
+                                    </label>
+                                </li>
+        </ul>
+    </nav>
+
+    <main class="pt-40 px-6 max-w-5xl mx-auto flex flex-col items-center justify-center">
+        <div class="w-full max-w-3xl mx-auto flex flex-col md:flex-row gap-4 items-center justify-center">
+            <!-- Search Input (Liquid Glass) -->
+            <form action="/" method="GET" class="relative w-full">
+                <input type="text" name="search" id="searchInput" placeholder="Search for favorite perfume..."
+                    value="<%= typeof search !== 'undefined' ? search : '' %>"
+                    class="w-full pl-6 pr-14 py-3 bg-base-100/40 backdrop-blur-lg border border-base-content/20 shadow-[0_4px_16px_0_rgba(0,0,0,0.05)] rounded-full text-base-content placeholder-base-content/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all duration-300" />
+
+                <!-- Nút Search Icon bên phải -->
+                <button type="submit"
+                    class="absolute inset-y-0 right-0 pr-4 pl-2 flex items-center text-base-content/60 hover:text-indigo-600 transition-colors cursor-pointer">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Filter Dropdown (Liquid Glass) -->
+            <div class="dropdown dropdown-end flex-shrink-0">
+                <form action="/" method="GET" id="filterForm">
+                    <input type="hidden" name="filter" id="filterInput"
+                        value="<%= typeof filter !== 'undefined' ? filter : '' %>" />
+                </form>
+                <div tabindex="0" role="button"
+                    class="flex items-center gap-2 px-6 py-3 bg-base-100/40 backdrop-blur-lg border border-base-content/20 shadow-[0_4px_16px_0_rgba(0,0,0,0.05)] rounded-full text-base-content hover:bg-base-100/60 hover:text-indigo-600 transition-all duration-300">
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                    <span id="filterLabel" class="font-medium">
+                        <%= (typeof selectedBrandName !=='undefined' && selectedBrandName) ? selectedBrandName
+                            : 'All Brands' %>
+                    </span>
+                </div>
+                <ul tabindex="0"
+                    class="dropdown-content menu bg-base-100/90 backdrop-blur-xl rounded-box z-[1] w-52 p-2 shadow border border-base-content/10 mt-2 gap-1 font-medium max-h-60 overflow-y-auto overflow-x-hidden flex-nowrap">
+                    <li><a onclick="setBrand('')" class="hover:bg-indigo-500/10 hover:text-indigo-600 rounded-lg">All
+                            Brands</a></li>
+                    <% brands.forEach(brand=> { %>
+                        <li><a onclick="setBrand('<%= brand.brandName %>')"
+                                class="hover:bg-indigo-500/10 hover:text-indigo-600 rounded-lg">
+                                <%= brand.brandName %>
+                            </a></li>
+                        <% }) %>
+                </ul>
+            </div>
+        </div>
+        <!-- Perfumes Grid 4x4 -->
+        <div id="perfumeGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full mt-16 pb-16">
+            <% perfumes.forEach(perfume=> { %>
+                <a href="/perfumes/<%= perfume._id %>" data-brand="<%= perfume.brandName %>"
+                    class="bg-base-100 border border-base-content/10 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer block">
+                    <div class="relative h-64 w-full bg-base-200 overflow-hidden">
+                        <img src="<%= perfume.uri %>" alt="<%= perfume.perfumeName %>" loading="lazy"
+                            class="h-full w-full object-cover transition-all duration-500 hover:scale-110 opacity-0"
+                            onload="this.classList.remove('opacity-0'); this.classList.add('opacity-100')"
+                            onerror="this.src='https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp'; this.classList.remove('opacity-0'); this.classList.add('opacity-100')" />
+                        <span
+                            class="absolute top-2 right-2 bg-neutral text-neutral-content text-xs font-semibold px-2 py-1 rounded">
+                            <%= perfume.targetAudience %>
+                        </span>
+                    </div>
+                    <div class="p-4 flex flex-col items-center text-center">
+                        <p class="text-xs text-base-content/60 uppercase tracking-widest mb-1">
+                            <%= perfume.brandName %>
+                        </p>
+                        <h3 class="card-title text-lg font-bold text-base-content line-clamp-1">
+                            <%= perfume.perfumeName %>
+                        </h3>
+                    </div>
+                </a>
+                <% }) %>
+        </div>
+
+        <!-- Pagination -->
+        <% if (totalPages> 1) { %>
+            <% let paginationQuery='' ; if (typeof search !=='undefined' && search) { paginationQuery='&search=' +
+                encodeURIComponent(search); } else if (typeof filter !=='undefined' && filter) {
+                paginationQuery='&filter=' + encodeURIComponent(filter); } %>
+
+                <div class="flex justify-center mt-8 pb-16">
+                    <div class="join">
+
+                        <!-- Go to FIRST page -->
+                        <% if (currentPage> 1) { %>
+                            <a href="/?page=1<%= paginationQuery %>" class="join-item btn">«</a>
+                            <% } else { %>
+                                <button class="join-item btn btn-disabled">«</button>
+                                <% } %>
+
+                                    <% for (let i=1; i <=totalPages; i++) { %>
+                                        <a href="/?page=<%= i %><%= paginationQuery %>"
+                                            class="join-item btn <%= i === currentPage ? 'btn-active' : '' %>">
+                                            <%= i %>
+                                        </a>
+                                        <% } %>
+
+                                            <!-- Go to LAST page -->
+                                            <% if (currentPage < totalPages) { %>
+                                                <a href="/?page=<%= totalPages %><%= paginationQuery %>"
+                                                    class="join-item btn">»</a>
+                                                <% } else { %>
+                                                    <button class="join-item btn btn-disabled">»</button>
+                                                    <% } %>
+
+                    </div>
+                </div>
+                <% } %>
+    </main>
+
+    <script>
+        function setBrand(brandId) {
+            document.getElementById('filterInput').value = brandId;
+            document.getElementById('filterForm').submit();
+        }
+    </script>
+
+    <script>
+        // Theme toggle persistence
+        (function () {
+            const themeCheckbox = document.querySelector('.theme-controller');
+            if (themeCheckbox) {
+                // Restore checkbox state on load
+                themeCheckbox.checked = localStorage.getItem('theme') === 'synthwave';
+                // Save on change
+                themeCheckbox.addEventListener('change', function () {
+                    const theme = this.checked ? 'synthwave' : '';
+                    localStorage.setItem('theme', theme);
+                    document.documentElement.setAttribute('data-theme', theme);
+                });
+            }
+        })();
+    </script>
+
+</body>
+
+</html>
