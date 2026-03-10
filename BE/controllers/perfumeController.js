@@ -82,7 +82,10 @@ exports.createPerfume = async (req, res) => {
         if (price <= 0 || volume <= 0) {
             return res.status(400).json({ status: false, message: "Value must be greater than 0" })
         }
-
+        const existPerfume = await Perfume.findOne({ perfumeName: req.body.perfumeName })
+        if (existPerfume) {
+            return res.status(400).json({ status: false, message: "Perfume name already exists" })
+        }
         const perfume = await Perfume.create({
             perfumeName, uri, price, concentration, description, ingredients, volume, targetAudience, brand
         })
@@ -141,7 +144,10 @@ exports.updatePerfume = async (req, res) => {
         if (price <= 0 || volume <= 0) {
             return res.status(400).json({ status: false, message: "Value must be greater than 0" })
         }
-
+        const existPerfume = await Perfume.findOne({ perfumeName: req.body.perfumeName })
+        if (existPerfume) {
+            return res.status(400).json({ status: false, message: "Perfume name already exists" })
+        }
         const perfume = await Perfume.findByIdAndUpdate(req.params.id, {
             perfumeName, uri, price, concentration, description, ingredients, volume, targetAudience, brand
         }, { new: true })

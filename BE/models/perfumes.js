@@ -3,7 +3,8 @@ const mongoose = require("mongoose")
 const perfumeSchema = new mongoose.Schema({
     perfumeName: {
         type: String,
-        require: true
+        unique: true,
+        required: true,
     },
     uri: {
         type: String,

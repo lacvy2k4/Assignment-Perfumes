@@ -34,7 +34,14 @@ exports.createBrand = async (req, res) => {
         if (!admin) {
             return res.status(403).json({ status: false, message: "You do not have access." })
         }
+        const existBrand = await Brand.findOne({ brandName: req.body.brandName })
+        if (existBrand) {
+            return res.status(400).json({ status: false, message: "Brand name already exists" })
+        }
         const brand = await Brand.create(req.body)
+        if (!brand) {
+            return res.status(400).json({ status: false, message: "Brand not created" })
+        }
         res.status(201).json({ status: true, message: "Brand created successfully", brand })
     } catch (error) {
         res.status(500).json({ status: false, message: error.message })
@@ -59,6 +66,10 @@ exports.updateBrand = async (req, res) => {
         const admin = await getAdminMember(req)
         if (!admin) {
             return res.status(403).json({ status: false, message: "You do not have access." })
+        }
+        const existBrand = await Brand.findOne({ brandName: req.body.brandName })
+        if (existBrand) {
+            return res.status(400).json({ status: false, message: "Brand name already exists" })
         }
         const brand = await Brand.findByIdAndUpdate(req.params.id, req.body, { new: true })
         res.status(200).json({ status: true, message: "Brand updated successfully", brand })
