@@ -513,8 +513,12 @@ const PerfumeDetail: React.FC = () => {
                                                 value={editCommentText}
                                                 onChange={(e) => setEditCommentText(e.target.value)}
                                                 onKeyDown={(e) => {
-                                                    if (e.key === "Enter") {
+                                                    if (e.key === "Enter" && !e.shiftKey) {
+                                                        e.preventDefault();
                                                         handleUpdateComment();
+                                                    }
+                                                    if (e.key === "Escape") {
+                                                        handleCancelEdit();
                                                     }
                                                 }}
                                                 className="w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-800 border-2 border-indigo-300 dark:border-indigo-500/50 focus:border-indigo-500 dark:focus:border-indigo-400 text-gray-900 dark:text-white outline-none transition-all duration-300 resize-none mb-3 shadow-inner"
@@ -552,7 +556,12 @@ const PerfumeDetail: React.FC = () => {
                 {/* Comment Modal */}
                 {isCommentModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-                        <div className="bg-white dark:bg-gray-800 rounded-[30px] shadow-2xl border border-gray-100 dark:border-gray-700 w-full max-w-lg overflow-hidden transform transition-all scale-100">
+                        <div
+                            className="bg-white dark:bg-gray-800 rounded-[30px] shadow-2xl border border-gray-100 dark:border-gray-700 w-full max-w-lg overflow-hidden transform transition-all scale-100"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Escape') setIsCommentModalOpen(false);
+                            }}
+                        >
                             <div className="px-8 py-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Write a Review</h3>
                                 <button onClick={() => setIsCommentModalOpen(false)} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
@@ -587,6 +596,12 @@ const PerfumeDetail: React.FC = () => {
                                         rows={4}
                                         value={commentText}
                                         onChange={(e) => setCommentText(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault();
+                                                handleCreateComment();
+                                            }
+                                        }}
                                         className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/50 outline-none transition-shadow resize-none"
                                         placeholder="What do you think about this fragrance?..."
                                     ></textarea>

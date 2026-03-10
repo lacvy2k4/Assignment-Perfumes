@@ -252,7 +252,16 @@ const Perfume: React.FC = () => {
                 {/* Create Modal Overlay */}
                 {isCreateModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-all scale-100">
+                        <div
+                            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-all scale-100"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Escape') setIsCreateModalOpen(false);
+                                if (e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
+                                    e.preventDefault();
+                                    handleCreateSubmit();
+                                }
+                            }}
+                        >
 
                             {/* Modal Header */}
                             <div className="px-6 py-5 border-b border-gray-100 dark:border-gray-700 shrink-0">

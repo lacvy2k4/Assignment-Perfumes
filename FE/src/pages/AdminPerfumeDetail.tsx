@@ -248,7 +248,17 @@ const AdminPerfumeDetail = () => {
                 </div>
 
                 {/* Main Card */}
-                <div className="bg-gray-50 dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div
+                    className="bg-gray-50 dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700"
+                    onKeyDown={(e) => {
+                        if (!isEditing) return;
+                        if (e.key === 'Escape') handleCancelEdit();
+                        if (e.key === 'Enter' && (e.target as HTMLElement).tagName !== 'TEXTAREA') {
+                            e.preventDefault();
+                            handleUpdateSubmit();
+                        }
+                    }}
+                >
                     <div className="flex flex-col md:flex-row">
                         {/* Left Side: Image */}
                         <div className="md:w-2/5 md:flex-shrink-0 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-700 p-8 flex justify-center items-center relative overflow-hidden group">

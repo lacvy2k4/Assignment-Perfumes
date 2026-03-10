@@ -111,6 +111,7 @@ const Profile: React.FC = () => {
                 gender: formData.gender,
                 updatedAt: updatedData?.updatedAt || new Date().toISOString()
             });
+            toast.success("Profile updated successfully");
             setIsEditing(false);
         } catch (err) {
             const error = err as AxiosError<{ message: string }>;

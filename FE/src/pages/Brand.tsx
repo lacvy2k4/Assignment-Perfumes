@@ -222,7 +222,13 @@ const Brand: React.FC = () => {
                                     placeholder="e.g. Chanel, Dior..."
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-shadow"
                                     autoFocus
-                                    onKeyDown={(e) => e.key === 'Enter' && handleCreateBrandSubmit()}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleCreateBrandSubmit();
+                                        if (e.key === 'Escape') {
+                                            setIsCreateModalOpen(false);
+                                            setNewBrandInput('');
+                                        }
+                                    }}
                                 />
                             </div>
                             <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700 flex justify-end gap-3">
